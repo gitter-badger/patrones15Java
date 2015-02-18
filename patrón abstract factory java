@@ -1,3 +1,4 @@
+
 public abstract class Disco implements Prototipo {
     @Override
     public abstract Prototipo clone();
