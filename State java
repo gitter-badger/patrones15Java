@@ -1,0 +1,129 @@
+// Patron State
+//Moreir Santiago Salvador 
+import java.util.*;
+public class Pedido
+{
+protected List<Producto> productos = new ArrayList<Producto>();
+protected EstadoPedido estadoPedido;
+public Pedido()
+{
+estadoPedido = new PedidoEnCurso(this);
+}
+public void agregaProducto(Producto producto)
+{
+estadoPedido.agregaProducto(producto);
+}
+public void suprimeProducto(Producto producto)
+{
+estadoPedido.suprimeProducto(producto);
+}
+public void borra()
+{
+estadoPedido.borra();
+}
+public void estadoSiguiente()
+{
+estadoPedido = estadoPedido.estadoSiguiente();
+}
+public List<Producto> getProductos()
+{
+return productos;
+}
+public void visualiza()
+{
+System.out.println("Contenido del pedido");!
+for (Producto producto: productos)
+producto.visualiza();
+System.out.println();
+}
+}
+public abstract class EstadoPedido
+{
+protected Pedido pedido;
+public EstadoPedido(Pedido pedido)
+{
+this.pedido = pedido;
+}
+public abstract void agregaProducto(Producto producto);
+public abstract void borra();
+public abstract void suprimeProducto(Producto producto);
+public abstract EstadoPedido estadoSiguiente();
+}
+public class PedidoEnCurso extends EstadoPedido
+{
+public PedidoEnCurso(Pedido pedido)
+{
+super(pedido);
+}
+public void agregaProducto(Producto producto)
+{
+pedido.getProductos().add(producto);
+}
+public void borra()
+{
+pedido.getProductos().clear();
+}
+public void suprimeProducto(Producto producto)
+{
+pedido.getProductos().remove(producto);
+}
+public EstadoPedido estadoSiguiente()!
+{
+return new PedidoValidado(pedido);
+}
+}
+public class PedidoValidado extends EstadoPedido
+{
+public PedidoValidado(Pedido pedido)
+{
+super(pedido);
+}
+public void agregaProducto(Producto producto) { }
+public void borra()
+{
+pedido.getProductos().clear();
+}
+public void suprimeProducto(Producto producto) { }
+public EstadoPedido estadoSiguiente()!
+{
+return new PedidoEntregado(pedido);
+}
+}
+public class PedidoEntregado extends EstadoPedido
+{
+public PedidoEntregado(Pedido pedido)
+{
+super(pedido);
+}
+public void agregaProducto(Producto producto) { }
+public void borra() { }
+public void suprimeProducto(Producto producto) { }
+public EstadoPedido estadoSiguiente()
+{
+return this;
+}
+}
+public class Producto
+{
+protected String nombre;
+public Producto(String nombre)
+{
+this.nombre = nombre;
+}
+public void visualiza()
+{
+System.out.println("Producto: " + nombre);
+}
+}
+public class Producto
+{
+protected String nombre;
+public Producto(String nombre)
+{
+this.nombre = nombre;
+}
+public void visualiza()
+{
+System.out.println("Producto: " + nombre);
+}
+}
