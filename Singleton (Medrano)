@@ -1,0 +1,106 @@
+El código fuente de la subclase DocumentacionEnBlanco de Documentacion aparece a
+continuación. Este código utiliza el patrón Singleton que se presenta en el capítulo siguiente y
+que tiene como objetivo asegurar que una clase sólo posee una única instancia.!
+
+import java.util.*;
+public class DocumentacionEnBlanco extends Documentacion 
+{ 
+private static DocumentacionEnBlanco _instance = null; 
+!
+private DocumentacionEnBlanco() 
+{ !
+documentos = new ArrayList<Documento>(); 
+} 
+
+public static DocumentacionEnBlanco Instance() 
+{ !
+if (_instance == null) 
+_instance = new DocumentacionEnBlanco(); 
+return _instance; 
+} 
+
+public void incluye(Documento doc) 
+{ 
+documentos.add(doc); 
+} 
+
+public void excluye(Documento doc) 
+{ 
+documentos.remove(doc); 
+} 
+}
+
+La subclase DocumentacionCliente escrita en Java aparece a continuación. Su constructor
+obtiene la lista de documentos de la documentación en blanco y a continuación los duplica, los
+rellena y los agrega a un contenedor de la documentación.
+import java.util.*; 
+public class DocumentacionCliente extends Documentacion 
+{ 
+public DocumentacionCliente(String informacion) 
+{ 
+documentos = new ArrayList<Documento>(); 
+DocumentacionEnBlanco documentacionEnBlanco = 
+DocumentacionEnBlanco.Instance(); 
+List<Documento> documentosEnBlanco = 
+documentacionEnBlanco.getDocumentos();
+
+for (Docmento documento: documentosEnBlanco) 
+{ 
+Documento copiaDocumento = documento.duplica(); 
+copiaDocumento.rellena(informacion); 
+documentos.add(copiaDocumento); 
+} 
+} 
+!
+public void visualiza() 
+{ 
+for (Documento documento: documentos) 
+documento.visualiza(); 
+} 
+!
+public void imprime() 
+{ 
+for (Documento documento: documentos) 
+documento.imprime(); 
+} 
+}
+
+
+Por último, veamos el código fuente de la clase Usuario cuyo método principal (main) comienza
+construyendo la documentación en blanco y, en particular, su contenido. A continuación, este
+método crea y visualiza la documentación de ambos clientes.
+public class Usuario 
+{ 
+public static void main(String[] args) 
+{ 
+//inicializacion de la documentacion en blanco 
+DocumentacionEnBlanco documentacionEnBlanco = 
+DocumentacionEnBlanco.Instance(); 
+documentacionEnBlanco.incluye(new OrdenDePedido()); 
+documentacionEnBlanco.incluye(new CertificadoCesion()); 
+documentacionEnBlanco.incluye(new SolicitudMatriculacion()); 
+// creacion de documentacion nueva para dos clientes 
+DocumentacionCliente documentacionCliente1 = 
+new DocumentacionCliente("Martin"); 
+DocumentacionCliente documentacionCliente2 = 
+new DocumentacionCliente("Simon"); 
+documentacionCliente1.visualiza(); 
+documentacionCliente2.visualiza(); 
+} 
+}
+El resultado de la ejecución es el siguiente:
+Muestra la orden de pedido: Martin 
+Muestra el certificado de cesion: Martin 
+Muestra la solicitud de matriculacion: Martin 
+Muestra la orden de pedido: Simon 
+Muestra el certificado de cesion: Simon 
+Muestra la solicitud de matriculacion: Simon
+
+
+Descripción
+
+El patrón Singleton tiene como objetivo asegurar que una clase sólo posee una instancia y
+proporcionar un método de clase único que devuelva esta instancia.
+En ciertos casos es útil gestionar clases que posean una única instancia. En el marco de los
+patrones de construcción, podemos citar el caso de una fábrica de productos (patrón Abstract
+Factory) del que sólo es necesario crear una instancia.
